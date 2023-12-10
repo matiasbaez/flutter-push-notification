@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "518930904090",
+    "project_id": "shared-mtsbz",
+    "storage_bucket": "shared-mtsbz.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:518930904090:android:8bb5878295d426eb28cda3",
+        "android_client_info": {
+          "package_name": "com.matiasbaez.push_notification"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD_yIbr7A5gbXYCyBweRFSxDfJKOPrdreM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
