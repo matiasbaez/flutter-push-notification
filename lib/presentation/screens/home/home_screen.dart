@@ -1,6 +1,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 
 import 'package:push_notification/presentation/blocs/blocs.dart';
 
@@ -33,8 +34,24 @@ class _HomeView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Center(
-      child: Text('Permissions'),
+
+    final notifications = context.watch<NotificationsBloc>().state.notifications;
+
+    return ListView.builder(
+      itemCount: notifications.length,
+      itemBuilder: (BuildContext context, int index) {
+        final notification = notifications[index];
+        return ListTile(
+          title: Text(notification.title),
+          subtitle: Text(notification.body),
+          leading: notification.imageUrl != null
+            ? Image.network(notification.imageUrl!)
+            : null,
+          onTap: () {
+            context.push('/push-detail/${notification.messageId}');
+          },
+        );
+      },
     );
   }
 }

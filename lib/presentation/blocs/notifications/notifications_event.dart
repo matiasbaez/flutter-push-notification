@@ -11,3 +11,10 @@ class OnNotificationStatusChanged extends NotificationsEvent {
 
   OnNotificationStatusChanged({ required this.status });
 }
+
+class OnNoficationReceived extends NotificationsEvent {
+
+  final PushMessage notification;
+
+  OnNoficationReceived({ required this.notification });
+}
