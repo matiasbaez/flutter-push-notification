@@ -1,6 +1,7 @@
 
 
 import 'dart:io';
+import 'dart:math';
 
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -24,6 +25,13 @@ Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 class NotificationsBloc extends Bloc<NotificationsEvent, NotificationsState> {
 
   FirebaseMessaging messaging = FirebaseMessaging.instance;
+  final Future<void> Function()? requestLocalNotificationPermissions;
+  final void Function({
+    required int id,
+    String? title,
+    String? body,
+    String? data,
+  })? showLocalNotification;
 
   static Future<void> initializeFirebaseCM() async {
     await Firebase.initializeApp(
@@ -31,7 +39,10 @@ class NotificationsBloc extends Bloc<NotificationsEvent, NotificationsState> {
     );
   }
 
-  NotificationsBloc() : super(const NotificationsState()) {
+  NotificationsBloc({
+    this.requestLocalNotificationPermissions,
+    this.showLocalNotification,
+  }) : super(const NotificationsState()) {
 
     on<OnNotificationStatusChanged>(_notificationStatusChanged);
     on<OnNoficationReceived>(_notificationReceived);
@@ -85,6 +96,15 @@ class NotificationsBloc extends Bloc<NotificationsEvent, NotificationsState> {
         : message.notification!.apple?.imageUrl
     );
 
+    if (showLocalNotification != null) {
+      showLocalNotification!(
+        id: Random().nextInt(1000),
+        title: notification.title,
+        body: notification.body,
+        data: notification.messageId
+      );
+    }
+
     add( OnNoficationReceived(notification: notification) );
   }
 
@@ -98,6 +118,11 @@ class NotificationsBloc extends Bloc<NotificationsEvent, NotificationsState> {
       provisional: false,
       sound: true,
     );
+
+    // Request access for local notifications
+    if (requestLocalNotificationPermissions != null) {
+      await requestLocalNotificationPermissions!();
+    }
 
     add(OnNotificationStatusChanged(status: settings.authorizationStatus));
   }
